@@ -65,5 +65,46 @@ class Post{
             return false;
         }
     }
+
+    function update(){
+        // update query
+        $query = 'UPDATE
+                    ' . $this->table . '
+                SET
+                    title=:title, 
+                    body=:body, 
+                    author=:author, 
+                    updated_at=:updated_at
+                WHERE
+                    id=:id';
+    
+        // prepare query statement
+        $stmt = $this->conn->prepare($query);
+    
+        // sanitize
+        $this->title=htmlspecialchars(strip_tags($this->title));
+        $this->body=htmlspecialchars(strip_tags($this->body));
+        $this->author=htmlspecialchars(strip_tags($this->author));
+        $this->updated_at=htmlspecialchars(strip_tags($this->updated_at));
+        $this->id=htmlspecialchars(strip_tags($this->id));
+    
+        // bind new values
+        $stmt->bindParam(":title", $this->title);
+        $stmt->bindParam(":body", $this->body);
+        $stmt->bindParam(":author", $this->author);
+        $stmt->bindParam(":updated_at", $this->updated_at);
+        $stmt->bindParam(':id', $this->id);
+    
+        //Execute Query
+        if($stmt->execute())
+        {   
+            return true;
+        }else{
+            //Print error if something goes wrong
+            print_r($stmt->errorInfo());
+            return false;
+        }
+    }
+    
 }
 ?>
