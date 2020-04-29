@@ -15,8 +15,16 @@ $db = $database->getConnection();
 //Instantiate Blog Post Object
 $post = new Post($db);
 
-//Call Read Function from Post Class
-$result = $post->read();
+// CHECK GET ID PARAMETER OR NOT
+if(isset($_GET['id']))
+{
+    $post->id = filter_var($_GET['id'], FILTER_VALIDATE_INT);
+    $result = $post->read_single();
+}
+else{
+    //Call Read Function from Post Class
+    $result = $post->read();
+}
 
 //Get row count
 $num = $result->rowCount();

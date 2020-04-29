@@ -22,9 +22,31 @@ class Post{
         $query = 'SELECT * FROM '.$this->table.' ORDER BY created_at DESC';
         //Prepare Statement
         $stmt =  $this->conn->prepare($query);
+
+        
+
         //Execute Query
         $stmt->execute();
         return $stmt;
+    }
+
+    public function read_single(){
+        //Create Query
+        $query = 'SELECT * FROM '.$this->table.' WHERE id=:id';
+        //Prepare Statement
+        $stmt =  $this->conn->prepare($query);
+
+        $this->id=htmlspecialchars(strip_tags($this->id));
+        $stmt->bindParam(':id', $this->id);
+
+        //Execute Query
+        if($stmt->execute())
+        {   
+            return $stmt;
+        }else{
+            //Print error if something goes wrong
+            print_r($stmt->errorInfo());
+        }
     }
 
     function create(){
